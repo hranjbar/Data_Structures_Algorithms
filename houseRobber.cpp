@@ -6,11 +6,10 @@
 // }
 int solution(vector<int> nums) {
     // return helper(nums, 0, nums.size());     // recursive solution (not so fast!)
-    int b=0,f=0;
-    for (int ix=0;ix<nums.size();ix++){
-        int cur = nums[ix];
-        if (cur+b>f) std::swap(b+=cur,f);
-        else b=f;
+    int back=0,front=0;
+    for (int g : nums){
+        if (g+back>front) std::swap(back+=g,front);
+        else back=front;
     }
-    return f;
+    return front;
 }
