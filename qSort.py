@@ -16,9 +16,7 @@ def qSort(a, l, r):
         while a[j] > x:
             j -= 1
         if i <= j:
-            t = a[i]
-            a[i] = a[j]
-            a[j] = t
+            a[i], a[j] = a[j], a[i]
             i += 1
             j -= 1
 
