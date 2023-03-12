@@ -21,19 +21,12 @@ You do not necessarily need to follow this format, so please be creative and com
  */
 class Codec {
 public:
-    int offset = 10000;
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
         if (!root) return "";
         int rval = root->val;
-        char c;
         string s = "";
-        rval += offset; // because: -1000 <= Node.val <= 1000
-        do {
-            c = rval%10 + '0';
-            s += c;
-        } while (rval /= 10);
-        reverse(s.begin(), s.end());
+        s = to_string(rval);
         s += "[" + serialize(root->left) + "][" + serialize(root->right) + "]";
         return s;
     }
@@ -47,13 +40,7 @@ public:
             if (data[ix]=='[') break;
             s += data[ix];
         }
-        int x = 1, rval = 0, n;
-        for_each(s.rbegin(), s.rend(), [&rval, &n, &x](char digit){
-            n = digit - 48;
-            rval += n * x;
-            x *= 10;
-        });
-        rval -= offset;
+        int rval = stoi(s);
         TreeNode * root = new TreeNode(rval);
         string l="", r="";
         int close=0, open=0;
