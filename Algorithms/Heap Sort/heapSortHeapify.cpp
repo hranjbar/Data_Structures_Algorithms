@@ -12,12 +12,15 @@ class Solution {
             r = 2*i + 2;
             if (l < en && r < en) {
                 if (a[l] > a[r]) {
-                    if (a[l] > a[i]) {swap(a[l], a[i]); i = l;} else break;
+                    if (a[l] > a[i]) swap(a[l], a[i]);
+                    i = l;
                 } else {
-                    if (a[r] > a[i]) {swap(a[r], a[i]); i = r;} else break;
+                    if (a[r] > a[i]) swap(a[r], a[i]);
+                    i = r;
                 }
             } else if (l < en) {
-                if (a[l] > a[i]) {swap(a[l], a[i]); i = l;} else break;
+                if (a[l] > a[i]) swap(a[l], a[i]);
+                i = l;
             } else break;
         }
     }
