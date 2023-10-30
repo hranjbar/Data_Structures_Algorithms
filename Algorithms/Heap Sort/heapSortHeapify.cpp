@@ -5,39 +5,81 @@ You must solve the problem without using any built-in functions in O(nlog(n)) ti
 */
 
 class Solution {
-    void sink(vector<int> & a, int st, int en) {
-        int i = st, l, r;
-        while (i < en) {
-            l = 2*i + 1;
-            r = 2*i + 2;
-            if (l < en && r < en) {
-                if (a[l] > a[r]) {
-                    if (a[l] > a[i]) swap(a[l], a[i]);
-                    i = l;
-                } else {
-                    if (a[r] > a[i]) swap(a[r], a[i]);
-                    i = r;
-                }
-            } else if (l < en) {
-                if (a[l] > a[i]) swap(a[l], a[i]);
-                i = l;
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        len = nums.size();
+        for (int j = len - 1; j >= 0; j--) sinkOne(nums, j);
+        for (int j = nums.size() - 1; j >= 0; j--) {
+            int num = pop(nums);
+            nums[j] = num;
+        }
+        return nums;
+    }
+private:
+    // implement max heap
+    int len;
+    void sinkTop(vector<int>& nums)
+    {
+        int i = 0;
+        while (i < len) {
+            int l = 2 * i + 1, r = 2 * i + 2;
+            int bigger;
+            if (l < len && r < len) {
+                if (nums[l] > nums[r]) bigger = l;
+                else bigger = r;
+            } else if (l < len) {
+                bigger = l;
+            } else if (r < len) {
+                bigger = r;
+            } else break;
+            if (nums[bigger] > nums[i]) {
+                swap(nums[bigger], nums[i]);
+                i = bigger;
             } else break;
         }
     }
-    int len;
-    void heapify(vector<int> & a) {
-        len = a.size();
-        for (int j = len - 1; j >= 0; j--) sink(a, j, len);
+    void sinkOne(vector<int>& nums, int i)
+    {
+        while (i < len) {
+            int l = 2 * i + 1, r = 2 * i + 2;
+            int bigger;
+            if (l < len && r < len) {
+                if (nums[l] > nums[r]) bigger = l;
+                else bigger = r;
+            } else if (l < len) {
+                bigger = l;
+            } else if (r < len) {
+                bigger = r;
+            } else break;
+            if (nums[bigger] > nums[i]) {
+                swap(nums[bigger], nums[i]);
+                i = bigger;
+            } else break;
+        }
     }
-    void pop(vector<int> & heap) {
+    int pop(vector<int>& nums)
+    {
+        int ret = nums[0];
+        nums[0] = nums[len - 1];
         len--;
-        swap(heap[0], heap[len]);
-        sink(heap, 0, len);
+        sinkTop(nums);
+        return ret;
     }
-public:
-    vector<int> sortArray(vector<int>& nums) {
-        heapify(nums);
-        while (len) pop(nums);
-        return nums;
-    }
+    // void swim(vector<int>& nums)
+    // {
+    //     int i = len - 1;
+    //     while (i >= 0) {
+    //         int root = (i - 1) / 2;
+    //         if (nums[i] > nums[root]) {
+    //             swap(nums[i], nums[root]);
+    //             i = root;
+    //         } else break;
+    //     }
+    // }
+    // void insert(int num, vector<int>& nums)
+    // {
+    //     nums.push_back(num);
+    //     len++;
+    //     swim(nums);
+    // }
 };
