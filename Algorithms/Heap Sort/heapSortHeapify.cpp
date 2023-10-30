@@ -9,9 +9,10 @@ public:
     vector<int> sortArray(vector<int>& nums) {
         len = nums.size();
         for (int j = len - 1; j >= 0; j--) sinkOne(nums, j);
-        for (int j = nums.size() - 1; j >= 0; j--) {
-            int num = pop(nums);
-            nums[j] = num;
+        while (len > 0) {
+            int num = nums[0];
+            pop(nums);
+            nums[len] = num;
         }
         return nums;
     }
@@ -57,13 +58,11 @@ private:
             } else break;
         }
     }
-    int pop(vector<int>& nums)
+    void pop(vector<int>& nums)
     {
-        int ret = nums[0];
         nums[0] = nums[len - 1];
         len--;
         sinkTop(nums);
-        return ret;
     }
     // void swim(vector<int>& nums)
     // {
