@@ -1,12 +1,36 @@
-/*Given an array of integers, find the maximum possible sum you can get from one of its contiguous subarrays. 
-The subarray from which this sum comes must contain at least 1 element.*/
+/*
+Given an integer array nums, find the 
+subarray
+ with the largest sum, and return its sum.
 
-int solution(vector<int> inputArray) {
-    int cum=0,max=INT_MIN;
-    for (auto x:inputArray){
-        cum+=x;
-        cum = cum>x?cum:x;
-        max=cum>max?cum:max;
+ 
+
+Example 1:
+
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+Example 2:
+
+Input: nums = [1]
+Output: 1
+Explanation: The subarray [1] has the largest sum 1.
+Example 3:
+
+Input: nums = [5,4,-1,7,8]
+Output: 23
+Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
+*/
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int ans = INT_MIN, sum = 0;
+        for (int & n : nums) {
+            sum += n;
+            if (sum > ans) ans = sum;
+            if (sum < 0) sum = 0;
+        }
+        return ans;
     }
-    return max;
-}
+};
