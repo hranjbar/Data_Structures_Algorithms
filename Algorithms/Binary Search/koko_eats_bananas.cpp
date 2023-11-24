@@ -37,6 +37,24 @@ public:
         int l = 1, r = maxPile, mid;
         while (l < r) {
             mid = l + (r - l) / 2;
+            int hrs = accumulate(piles.begin(), piles.end(), 0, [&mid](int acc, int & p){
+                return acc + ceil(p * 1.0 / mid);
+            });
+            if (hrs > h) l = mid + 1;
+            else r = mid;
+        }
+        return l;      
+    }
+};
+
+/*
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int maxPile = *max_element(piles.begin(), piles.end());
+        int l = 1, r = maxPile, mid;
+        while (l < r) {
+            mid = l + (r - l) / 2;
             int hrs = hours(piles, mid);
             // printf("%i hours if eat %i bananas\n", hrs, mid);
             if (hrs > h) l = mid + 1;
@@ -53,3 +71,4 @@ private:
         return ret;
     }
 };
+*/
