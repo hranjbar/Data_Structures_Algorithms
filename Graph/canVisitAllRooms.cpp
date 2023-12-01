@@ -11,19 +11,17 @@ Given an array rooms where rooms[i] is the set of keys that you can obtain if yo
 class Solution {
 public:
     bool canVisitAllRooms(vector<vector<int>>& rooms) {
-        int n(rooms.size());
-        unordered_set<int> locked;
-        for (int i=1; i<n; i++) locked.insert(i);
-        queue<int> keys;
-        for (int key : rooms[0]) keys.push(key);
-        while (!keys.empty()){
-            int key = keys.front();
-            keys.pop();
-            if (locked.count(key)){
-                locked.erase(key);
-                for (int jey : rooms[key]) keys.push(jey);
+        unordered_set<int> vis;
+        queue<int> q;
+        q.push(0);
+        while (!q.empty()) {
+            int i = q.front();
+            q.pop();
+            vis.insert(i);
+            for (int j : rooms[i]) {
+                if (vis.count(j) == 0) q.push(j);
             }
         }
-        return locked.empty();
+        return vis.size() == rooms.size();
     }
 };
