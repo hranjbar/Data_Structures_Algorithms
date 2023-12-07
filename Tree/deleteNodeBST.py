@@ -1,6 +1,8 @@
 '''
-Given a root node reference of a BST and a key, delete the node with the given key in 
-the BST. Return the root node reference (possibly updated) of the BST.
+Given a root node reference of a BST and a key, delete the 
+node with the given key in 
+the BST. Return the root node reference (possibly updated)
+of the BST.
 
 Basically, the deletion can be divided into two stages:
 
@@ -13,9 +15,12 @@ Example 1:
 
 Input: root = [5,3,6,2,4,null,7], key = 3
 Output: [5,4,6,2,null,null,7]
-Explanation: Given key to delete is 3. So we find the node with value 3 and delete it.
-One valid answer is [5,4,6,2,null,null,7], shown in the above BST.
-Please notice that another valid answer is [5,2,6,null,4,null,7] and it's also accepted.
+Explanation: Given key to delete is 3. So we find the node 
+with value 3 and delete it.
+One valid answer is [5,4,6,2,null,null,7], shown in the 
+above BST.
+Please notice that another valid answer is 
+[5,2,6,null,4,null,7] and it's also accepted.
 
 Example 2:
 
@@ -37,7 +42,8 @@ root is a valid binary search tree.
 -105 <= key <= 105
  
 
-Follow up: Could you solve it with time complexity O(height of tree)?
+Follow up: Could you solve it with time complexity 
+O(height of tree)?
 '''
 
 # Definition for a binary tree node.
@@ -60,7 +66,6 @@ class Solution:
             else:
                 r = root.left
                 if not r.right:
-                    root.val = r.val
                     root.left = r.left
                 else:
                     par = root  # parent
@@ -68,5 +73,5 @@ class Solution:
                         par = r
                         r = r.right
                     par.right = r.left
-                    root.val = r.val
+                root.val = r.val
         return root
