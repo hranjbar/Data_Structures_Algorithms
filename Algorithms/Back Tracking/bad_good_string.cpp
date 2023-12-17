@@ -36,19 +36,16 @@ good, bad or mixed.
 
 string vs = "aeiou";
 unordered_set<char> hs(vs.begin(),vs.end());
-string solution(string s) {
-    int c=0,v=0;
-    for (char ch : s) {
-        if (ch=='?'){v=0;c=0;}
-        else if (hs.count(ch)){v++;c=0;}
-        else {c++;v=0;}
-        if (c==5 || v==3) return "bad";
-    }
-    auto it=s.find("?");
-    if (it!=s.npos) {
-        string vow = solution(s.replace(it,1,"a"));
-        string con = solution(s.replace(it,1,"x"));
+string solution(string s, int i=0, int c=0, int v=0) {
+    if (c==5 || v==3) return "bad";
+    if (i==s.length()) return "good";
+    char ch=s[i];
+    if (ch=='?') {
+        string vow = solution(s,i+1,0,v+1); // pick consonant
+        string con = solution(s,i+1,c+1,0);   // pick vowel
         return vow == con ? vow : "mixed";
+    } else {
+        if (hs.count(ch)) return solution(s,i+1,0,v+1);
+        else return solution(s,i+1,c+1,0);
     }
-    return "good";
 }
