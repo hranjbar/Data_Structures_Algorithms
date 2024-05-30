@@ -32,25 +32,25 @@ This graph doesn't contain a directed cycle (there are two paths
 from 0 to 3, but no paths from 3 back to 0).
 */
 
-bool dfs(int i, vector<int>& vis, unordered_set<int>& h, vector<vector<int>>& adj)
+unordered_set<int> vis, sorted;
+bool dfs(int cur, vector<vector<int>>& adj)
 {
-    if (h.count(i)) return false;
-    if (vis[i]==0) {
-        vis[i]=1;
-        h.insert(i);
-        for (int j : adj[i]) {
-            if (!dfs(j, vis, h, adj)) return false;
-        }
-        h.erase(i);
+    if (sorted.count(cur)) return true;
+    if (vis.count(cur)) return false;
+    
+    // recursion
+    vis.insert(cur);
+    for (int to : adj[cur]){
+        if (!dfs(to, adj)) return false;
     }
+    vis.erase(cur);
+    
+    sorted.insert(cur);
     return true;
 }
 bool solution(vector<vector<int>> connections) {
-    int n = connections.size();
-    vector<int> vis(n);
-    unordered_set<int> h;
-    for (int i=0; i<n; i++) {
-        if (!dfs(i, vis, h, connections)) return true;
+    for (int cur=0; cur<connections.size(); cur++){
+        if (!dfs(cur, connections)) return true;
     }
     return false;
 }
