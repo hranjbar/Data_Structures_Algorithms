@@ -30,31 +30,38 @@ The number of nodes in the tree is in the range [0, 2000].
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        if (!root) return {};
+        // if (!root) return {};
+        stack<vector<int>> st;
         queue<TreeNode*> q;
-        q.push(root);
-        vector<vector<int>> out;
+        if (root) q.push(root);
         while (!q.empty()) {
             int sz = q.size();
-            vector<int> row;
-            while (sz>0) {
-                TreeNode* cur = q.front();
-                q.pop();
-                row.push_back(cur->val);
+            vector<int> level;
+            while (sz--) {
+                TreeNode* cur = q.front(); q.pop();
+                level.push_back(cur->val);
                 if (cur->left) q.push(cur->left);
                 if (cur->right) q.push(cur->right);
-                sz--;
             }
-            out.push_back(row);
+            st.push(level);
         }
-        vector<vector<int>> ans(out.size());
-        for (int i=out.size()-1; i>=0; i--) {
-            for (int j=0; j<out[i].size(); j++) 
-                ans[out.size()-i-1].push_back(out[i][j]);
-        }
+        vector<vector<int>> ans;
+        while (!st.empty()) {ans.push_back(st.top()); st.pop();}
         return ans;
     }
 };
