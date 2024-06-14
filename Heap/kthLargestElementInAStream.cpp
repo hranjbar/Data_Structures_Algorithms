@@ -15,20 +15,16 @@ in the stream.
 class KthLargest {
 public:
     KthLargest(int k, vector<int>& nums) : k_(k){
-        int n=nums.size();
-        for (int i=0; i<n; i++) add(nums[i]);
+        for (int& num : nums) add(num);
     }
-    
     int add(int val) {
-        if (minHeap.size() < k_) minHeap.push(val);
-        else if (val > minHeap.top()) {
-            minHeap.pop();
-            minHeap.push(val);
-        }
-        return minHeap.top();
+        minHeap_.push(val);
+        if (minHeap_.size() > k_) minHeap_.pop();
+        return minHeap_.top();
     }
-    priority_queue<int, vector<int>, greater<int>> minHeap;
-    int k_;
+private:
+    priority_queue<int, vector<int>, greater<int>> minHeap_;
+    size_t k_;
 };
 
 /**
