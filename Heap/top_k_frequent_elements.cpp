@@ -26,23 +26,16 @@ array's size.
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
-        unordered_map<int,int> hmap;
-        for (int& num : nums) hmap[num]++;
-        typedef pair<int,int> T;    // {num, freq}
-        auto cmp = [](const T& l, const T& r){return l.second > r.second;};
-        priority_queue<T, vector<T>, decltype(cmp)> minHeap;
-        for (auto& [key, val] : hmap) {
-            if (minHeap.size() < k) minHeap.push({key, val});
-            else if (val > minHeap.top().second) {
-                minHeap.pop();
-                minHeap.push({key,val});
-            }
+        unordered_map<int,int> counter;
+        for (int& n : nums) counter[n]++;
+        using T = pair<int,int>;
+        priority_queue<T, vector<T>, greater<T>> minHeap;
+        for (auto& [key, val] : counter) {
+            minHeap.push({val, key});
+            if (minHeap.size() > k) minHeap.pop();
         }
         vector<int> ans;
-        while (!minHeap.empty()) {
-            ans.push_back(minHeap.top().first);
-            minHeap.pop();
-        }
+        for (; !minHeap.empty(); minHeap.pop()) ans.push_back(minHeap.top().second);
         return ans;
     }
 };
