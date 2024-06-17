@@ -36,35 +36,33 @@ All the pairs [ai, bi] are distinct.
 
 class Solution {
 public:
-    vector<int> sorted;
-    unordered_set<int> vis;
-    queue<int> topo;
-    bool dfs(int cur, vector<vector<int>>& adj)
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vis.resize(numCourses, 0); cycle_vis.resize(numCourses, 0);
+        adj.resize(numCourses, {});
+        for (auto& edge : prerequisites) adj[edge[0]].push_back(edge[1]);
+        for (int course = 0; course < numCourses; course++) {
+            if (!dfs(course)) return {};
+        }
+        return sorted;
+    }
+private:
+    vector<int> vis, cycle_vis, sorted;
+    vector<vector<int>> adj;
+    bool dfs(int cur)
     {
-        if (sorted[cur]) return true;     // already added to result queue
-        if (vis.count(cur)) return false; // detected cycle
+        if (vis[cur] == 1) return true; // already sorted
+        if (cycle_vis[cur] == 1) return false; // detected cycle
 
         // recursion
-        vis.insert(cur);    // add
-        for (int to : adj[cur]) {
-            if (!dfs(to, adj)) return false;
+        cycle_vis[cur] = 1;
+        for (int& to : adj[cur]) {
+            if (!dfs(to)) return false;
         }
-        vis.erase(cur);     // remove
+        cycle_vis[cur] = 0;
 
-
-        topo.push(cur); // add to topological-sort results
-        sorted[cur]=1;  // confirmed order
+        // populate
+        sorted.push_back(cur);
+        vis[cur] = 1;
         return true;
-    }
-    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> adj(numCourses);
-        for (auto p:prerequisites) adj[p[0]].push_back(p[1]);
-        sorted.assign(numCourses, 0);
-        for (int c=0; c<numCourses; c++) {
-            if (!dfs(c, adj)) return {};
-        }
-        vector<int> ans;
-        while (!topo.empty()) {ans.push_back(topo.front()); topo.pop();}
-        return ans;
     }
 };
