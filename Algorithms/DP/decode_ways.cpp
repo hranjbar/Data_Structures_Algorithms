@@ -47,16 +47,44 @@ s contains only digits and may contain leading zero(s).
 class Solution {
 public:
     int numDecodings(string s) {
-        unordered_set<char> six = {'0','1','2','3','4','5','6'};
-        vector<int> dp(s.length()+1);
-        dp.back()=1;
-        for (int i=s.length()-1; i>=0; i--) {
-            if (s[i]=='0') dp[i]=0;
-            else dp[i]=dp[i+1];
-            if (i<s.length()-1 && (s[i]=='1' || (s[i]=='2' && six.count(s[i+1])))) {
-                dp[i] += dp[i+2];
+        int len = s.length();
+        vector<int> dp(len + 1, 1);
+        for (int i = len - 1; i >= 0; i--) {
+            // '0' alone maps to nothing
+            if (s[i] == '0') dp[i] = 0;
+            else dp[i] = dp[i + 1];
+
+            // handling two-digit letters
+            if (i < len - 1 && // look forward
+            (s[i] == '1' || // '10'->'19'
+            (s[i] == '2' && s[i + 1] < '7'))) { // '20'->'26'
+                dp[i] += dp[i + 2];
             }
         }
         return dp.front();
+    }
+};
+
+// alternate solution with O(1) space
+class Solution {
+public:
+    int numDecodings(string s) {
+        int len = s.length(), next = 1, cur, nextnext;
+        for (int i = len - 1; i >= 0; i--) {
+            // '0' alone maps to nothing
+            if (s[i] == '0') cur = 0;
+            else cur = next;
+
+            // handling two-digit letters
+            if (i < len - 1 && // look forward
+            (s[i] == '1' || // '10'->'19'
+            (s[i] == '2' && s[i + 1] < '7'))) { // '20'->'26'
+                cur += nextnext;
+            }
+            // iterate
+            nextnext = next;
+            next = cur;
+        }
+        return cur;
     }
 };
