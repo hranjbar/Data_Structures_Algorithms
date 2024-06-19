@@ -36,33 +36,45 @@ there will be a previous valid character to match.
 class Solution {
 public:
     bool isMatch(string s, string p) {
-        m = s.length(), n = p.length();
-        return bt(0, 0, s, p);
+        m = s.length(); n = p.length();
+        word = s; pat = p;
+        return bt(0, 0);
     }
 private:
     int m, n;
-    unordered_map<int, int> cache;
-    bool bt(int i, int j, string& s, string& p)
+    string word, pat;
+    unordered_map<int,int> memo;
+    bool bt(int i, int j)
     {
-        if (i>=m && j>=n) return true;
-        if (j>=n) return false;
-        int ix=j + i*n;
-        if (cache.count(ix)) return cache[ix];
-        bool match = false;
-        if (i<m && (s[i]==p[j] || p[j]=='.')) match = true;
-        // first handle '*'
-        if (j+1<n && p[j+1]=='*') {
-            cache[ix] = (match && bt(i+1, j, s, p)) || bt(i, j+2, s, p);
-            return cache[ix];
-            // bt(i+1, j) means add p[j]
-            // bt(i, j+2) means don't add it
-            // obviously you add only if s[i] matches p[j]
+        // termination
+        if (i >= m && j >= n) return true;
+        if (j >= n) return false;
+
+        // lexicographical indexing to avoid default constructor
+        // of unordered_map<pair<int,int>,int>
+        int ix = j + i * n; 
+
+        // memoization
+        if (memo.count(ix)) return memo[ix];
+
+        bool matched = false;
+        if (i < m && (word[i] == pat[j] || pat[j] == '.')) matched = true;
+
+        // handle '*' and recursion
+        if (j < n - 1 && pat[j + 1] == '*') {
+            memo[ix] = (matched && bt(i + 1, j)) ||
+                            bt(i, j + 2);
+            return memo[ix];
         }
-        if (match) {
-            cache[ix] = bt(i+1, j+1, s, p);
-            return cache[ix];
+
+        // matched and recursion
+        if (matched) {
+            memo[ix] = bt(i + 1, j + 1);
+            return memo[ix];
         }
-        cache[ix] = false;
-        return cache[ix];
+
+        // when not matched
+        memo[ix] = false;
+        return false;
     }
 };
