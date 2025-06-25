@@ -26,13 +26,14 @@ Constraints:
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-        unordered_map<int, int> prefix;
-        prefix[0] = 1;
-        int curSum = 0, ans = 0;
-        for (int & num : nums) {
-            curSum += num;
-            if (prefix.count(curSum - k)) ans += prefix[curSum - k];
-            prefix[curSum]++;
+        unordered_map<int, int> pref{{0,1}};
+        int sum{0}, ans{0};
+        for (auto& num : nums){
+            sum += num;
+            if (pref.count(sum-k)){
+                ans += pref[sum-k];
+            }
+            pref[sum]++;
         }
         return ans;
     }
