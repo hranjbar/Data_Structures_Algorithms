@@ -43,12 +43,12 @@ Constraints:
 class Solution {
 public:
     bool checkSubarraySum(vector<int>& nums, int k) {
-        unordered_map<int, int> prefix = {{0,0}};
-        int sum = 0;
-        for (int i = 0; i < nums.size(); i++) {
+        unordered_map<int, int> pref{{0, -1}};
+        int sum{0};
+        for (auto i{0}; i<nums.size();i++){
             sum += nums[i];
-            if (prefix.count(sum%k) == 0) prefix[sum%k] = i+1;
-            else if (prefix[sum%k] < i) return true;
+            if (not pref.count(sum%k)) pref[sum%k] = i;
+            else if (pref[sum%k]< i-1) return true; // its length is at least two
         }
         return false;
     }
