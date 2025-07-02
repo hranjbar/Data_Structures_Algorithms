@@ -53,8 +53,8 @@ nums is sorted in non-decreasing order.
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
-        int k=1, ix=1, uval=nums.front(), rep=0;
-        for (; ix < nums.size(); ix++){
+        int k=1, uval=nums.front(), rep=0;
+        for (int ix=1; ix < nums.size(); ix++){
             if (uval != nums[ix]) {
                 rep = 0;
                 uval = nums[ix];
