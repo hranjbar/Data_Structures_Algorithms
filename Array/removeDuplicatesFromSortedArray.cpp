@@ -49,7 +49,7 @@ class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
         int k=1, uval=nums.front();
-        for (ix=1; ix < nums.size(); ix++){
+        for (int ix=1; ix < nums.size(); ix++){
             if (nums[ix] != uval){
                 uval = nums[ix];
                 nums[k++] = uval;
