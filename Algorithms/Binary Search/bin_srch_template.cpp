@@ -27,10 +27,10 @@ public:
         int l = 0, r = nums.size() - 1, mid;
         while (l < r){
             mid = l + (r - l) / 2;
-            if (target > nums[mid]) l = mid + 1;
-            else r = mid;
+            if (target <= nums[mid]) r = mid;
+            else l = mid + 1;
         }
-        return target == nums[l] ? l : -1;
+        return nums[l] == target ? l : -1;
     }
 };
 
