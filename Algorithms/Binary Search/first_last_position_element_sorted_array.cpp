@@ -29,34 +29,36 @@ nums is a non-decreasing array.
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        if (nums.empty()) return {-1,-1};
-        int l=lower(nums, target);
-        if (l==nums.size() || nums[l]!=target) return {-1,-1};
-        int r=upper(nums, target);
-        return {l,r-1};
+        int l = lower(nums, target);
+        if (l == nums.size() or nums[l] != target){
+            return {-1, -1};
+        }
+        int r = upper(nums, target);
+        return {l, r - 1};
     }
-private:
-    int lower(vector<int>& n, int k)
+    private:
+    int lower(vector<int>& nums, int k)
     {
-        int l=0, r=n.size(), mid;
-        while (l<r) {
-            mid = l+(r-l)/2;
-            if (k<=n[mid]) r=mid;
-            else l=mid+1;
+        int l = 0, r = nums.size() - 1, mid;
+        while (l < r){
+            mid = l + (r - l) / 2;
+            if (k <= nums[mid]) r = mid;
+            else l = mid + 1;
         }
         return l;
     }
-    int upper(vector<int>& n, int k)
+    int upper(vector<int>& nums, int k)
     {
-        int l=0, r=n.size(), mid;
-        while (l<r) {
-            mid = l+(r-l)/2;
-            if (k<n[mid]) r=mid;
-            else l=mid+1;
+        int l = 0, r = nums.size(), mid;    // note r's initial value
+        while (l < r){
+            mid = l + (r - l) / 2;
+            if (k < nums[mid]) r = mid;    // note '<' sign
+            else l = mid + 1;
         }
         return l;
     }
 };
+
 /* C++ STL solution
 auto l=lower_bound(nums.begin(), nums.end(), target);
 if (l==nums.end() || *l!=target) return {-1, -1};
