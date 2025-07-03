@@ -1,14 +1,13 @@
 /*
-Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.
-
+Koko loves to eat bananas. There are n piles of bananas, the ith 
+pile has piles[i] bananas. The guards have gone and will come back 
+in h hours.
 Koko can decide her bananas-per-hour eating speed of k. Each hour, 
 she chooses some pile of bananas and eats k bananas from that pile.
 If the pile has less than k bananas, she eats all of them instead
 and will not eat any more bananas during this hour.
-
 Koko likes to eat slowly but still wants to finish eating all the
 bananas before the guards return.
-
 Return the minimum integer k such that she can eat all the bananas 
 within h hours.
 
@@ -33,41 +32,21 @@ piles.length <= h <= 109
 class Solution {
 public:
     int minEatingSpeed(vector<int>& piles, int h) {
-        int maxPile = *max_element(piles.begin(), piles.end());
-        int l = 1, r = maxPile, mid;
-        while (l < r) {
+        int r = *max_element(piles.begin(), piles.end());
+        int l = max(*min_element(piles.begin(), piles.end()) / h, 1);
+        int mid;
+        while (l < r){
             mid = l + (r - l) / 2;
-            int hrs = accumulate(piles.begin(), piles.end(), 0, [&mid](int acc, int & p){
-                return acc + ceil(p * 1.0 / mid);
+            int hours = accumulate(piles.begin(), piles.end(), 0, 
+            [&mid](int acc, int& pile){
+                return acc + ceil((double)pile / mid);
             });
-            if (hrs > h) l = mid + 1;
-            else r = mid;
+            if (h >= hours) r = mid;
+            else l = mid + 1;
         }
-        return l;      
+        return l;
     }
 };
-
-/*
-class Solution {
-public:
-    int minEatingSpeed(vector<int>& piles, int h) {
-        int maxPile = *max_element(piles.begin(), piles.end());
-        int l = 1, r = maxPile, mid;
-        while (l < r) {
-            mid = l + (r - l) / 2;
-            int hrs = hours(piles, mid);
-            // printf("%i hours if eat %i bananas\n", hrs, mid);
-            if (hrs > h) l = mid + 1;
-            else r = mid;
-        }
-        // printf("l=%i, mid=%i, r=%i\n", l, mid, r);
-        return l;      
-    }
-private:
-    int hours(vector<int> & piles, int b)
-    {
-        int ret = 0;
-        for (auto & p : piles) ret += (int)ceil(p*1.0 / b);
         return ret;
     }
 };
