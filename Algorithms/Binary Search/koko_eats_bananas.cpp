@@ -47,6 +47,3 @@ public:
         return l;
     }
 };
-        return ret;
-    }
-};
