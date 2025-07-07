@@ -34,13 +34,15 @@ Constraints:
 class Solution {
 public:
     int maxProfit(vector<int>& prices, int fee) {
-        int n = prices.size();
-        vector<vector<int>> dp(n, vector<int>(2));
-        dp.front() = {0-prices.front(), 0};
-        for (int i = 1; i < n; i++) {
-            dp[i][0] = max(dp[i-1][0], dp[i-1][1]-prices[i]);   // no fee when buying
-            dp[i][1] = max(dp[i-1][0]+prices[i]-fee, dp[i-1][1]); // pay fee when selling
+        vector<pair<int, int>> dp(prices.size(), {0,0});
+        dp.front().first = 0 - prices.front();
+        // dp elements = {have the stock, don't have the stock}
+        for (int i = 1; i < prices.size(); i++){
+            // 1. max of {you had it and now you keep it, you din't have it and now you buy it}
+            dp[i].first = max(dp[i - 1].first, dp[i - 1].second - prices[i]);
+            // 2. max of {you had it and now you sell it, you didn't have it and still don't buy it now}
+            dp[i].second = max(dp[i - 1].first + prices[i] - fee, dp[i - 1].second);
         }
-        return max(dp.back()[0], dp.back()[1]);
+        return max(dp.back().first, dp.back().second);
     }
 };
