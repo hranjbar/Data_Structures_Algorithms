@@ -1,4 +1,4 @@
-'''
+/*
 You are a professional robber planning to rob houses along a street.
 Each house has a certain amount of money stashed, the only constraint
 stopping you from robbing each of them is that adjacent houses have 
@@ -25,12 +25,19 @@ Total amount you can rob = 2 + 9 + 1 = 12.
 Constraints:
 1 <= nums.length <= 100
 0 <= nums[i] <= 400
-'''
+*/
 
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        l, ll = 0, 0    # money stashed from last two houses
-        for n in nums:
-            cur = max(n+ll, l)
-            ll, l = l, cur
-        return cur
+int rob(int* nums, int numsSize) {
+    int l1 = nums[0], l2 = 0;
+    int cur = l1; // in case numsSize = 1
+    for (int i = 1; i < numsSize; i++){
+
+        cur = nums[i] + l2; // rob
+        if (cur < l1) cur = l1; // reconsider robbing
+
+        // iterate
+        l2 = l1;
+        l1 = cur;
+    }
+    return cur;
+}
