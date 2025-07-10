@@ -50,29 +50,33 @@ obstacles[0] == obstacles[n] == 0
 class Solution {
 public:
     int minSideJumps(vector<int>& obstacles) {
-        int N = obstacles.size();
-        // min # of side jumps at each row and each non-obstacle lane
-        vector<array<int, 3>> dp(N + 1, {INT_MAX, INT_MAX, INT_MAX});
-        // all lanes open in  last row
-        for (int j = 0; j < 3; j++) dp[N - 1][j] = 0;
-
-        // dynamic programming (bottom-up approach)
-        for (int i = N - 2; i >= 0; i--) {
-            // lanes open to a forward jump
-            for (int lane = 0; lane < 3; lane++) {
-                if (lane + 1 == obstacles[i]) continue; // skip if obstacle
-                if (lane + 1 != obstacles[i + 1]) dp[i][lane] = dp[i + 1][lane];
-            }
-            // lanes that need side jumps
-            for (int lane = 0; lane < 3; lane++) {
-                if (lane + 1 == obstacles[i]) continue; // skip if obstacle
-                if (dp[i][lane] == INT_MAX) {
-                    dp[i][lane] = 1 + *min_element(dp[i].begin(), dp[i].end());
+        vector<array<int, 3>> dp(obstacles.size(), {INT_MAX, INT_MAX, INT_MAX});
+        dp.back() = {0, 0, 0}; // all lanes pass at n-th point
+        
+        for (int i=dp.size()-2; i>=0; i--){
+            for (int j=0; j<3; j++){
+                for (int k=0; k<3; k++){
+                    if (obstacles[i+1] != k+1 and 
+                        obstacles[i] != k+1){
+                            // no obstacle in departure (i) and 
+                            // destination (i+1) lanes
+                        if (j != k) dp[i][j] = min(dp[i][j], dp[i+1][k] + 1); // jump
+                        else dp[i][j] = min(dp[i][j], dp[i+1][k]); // pass
+                    }
                 }
             }
         }
-
-        // entry point is first row second lane
         return dp[0][1];
     }
 };
+
+/*
+Use dynamic programming; maintain a n-by-3 matrix, where dp[i][j] shows 
+number of jumps required to reach the end from lane j at point i. 
+Initiate dp with all INT_MAX. Set last point to all zeros, since no jumps required
+at point n.
+Start from n-1-th point going backward, update dp[i] only for lanes where 
+lane is open both at current point (i) and next point (i+1). If they are 
+same lanes, don't increase number of jumps, otherwise increase number of jumps 
+by one.
+*/
