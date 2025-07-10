@@ -33,17 +33,14 @@ Constraints:
 class Solution {
 public:
     int minCostClimbingStairs(vector<int>& cost) {
-        int N = cost.size();
-        int nxt = cost[N - 1]; // cost to reach next step
-        int nxt2 = 0; // cost to reach two steps ahead
-        for (int i = N - 2; i >= 0; i--) {
-            // dynamic programming
-            cost[i] += min(nxt, nxt2);
+        int nxt = 0, nxtnxt = ~(0x1u << 31), cur;
+        for (int i = cost.size() - 1; i >= 0; i--){
+            cur = cost[i] + min(nxt, nxtnxt);
             // iterate
-            nxt2 = nxt;
-            nxt = cost[i];
+            nxtnxt = nxt;
+            nxt = cur;
         }
-        return min(nxt, nxt2);
+        return min(nxt, nxtnxt);
     }
 };
 
@@ -57,17 +54,3 @@ are at the top, the cost is 0.
 dp[i] = cost[i] + min(dp[i + 1], dp[i + 2]). 
 The answer will be the minimum of dp[0] and dp[1]
 */
-
-// solution in C language
-int minCostClimbingStairs(int* cost, int costSize) {
-    int nxt = cost[costSize - 1]; // cost to reach next step
-    int nxt2 = 0; // cost to reach two steps ahead
-    for (int i = costSize - 2; i >= 0; i--) {
-        // dynamic programming
-        cost[i] += nxt < nxt2 ? nxt : nxt2; // min(nxt, nxt2)
-        // iterate
-        nxt2 = nxt;
-        nxt = cost[i];
-    }
-    return nxt < nxt2 ? nxt : nxt2; // min(nxt, nxt2)
-}
