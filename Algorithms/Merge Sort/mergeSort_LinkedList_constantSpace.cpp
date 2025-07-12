@@ -1,5 +1,6 @@
 /*
-Given the head of a linked list, return the list after sorting it in ascending order.
+Given the head of a linked list, return the list after sorting it 
+in ascending order.
 
 Example 1:
 Input: head = [4,2,1,3]
@@ -17,7 +18,6 @@ Constraints:
 The number of nodes in the list is in the range [0, 5 * 104].
 -105 <= Node.val <= 105
  
-
 Follow up: Can you sort the linked list in O(n logn) time 
 and O(1) memory (i.e. constant space)?
 */
@@ -32,45 +32,58 @@ and O(1) memory (i.e. constant space)?
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
+    ListNode* sortList(ListNode* head) {
+        return partition(head);
+    }
+    private:
     ListNode* merge(ListNode* left, ListNode* right)
     {
-        // termination
-        if (!left) return right;
-        if (!right) return left;
+        if (not left) return right;
+        if (not right) return left;
 
-        // recursive merging
-        ListNode* ret = nullptr;
-        if (left->val < right->val) {
+        ListNode* ret;
+        if (left->val < right->val){
             ret = left;
             ret->next = merge(left->next, right);
-        } else {
+        }
+        else {
             ret = right;
             ret->next = merge(left, right->next);
         }
         return ret;
     }
-    ListNode* sortList(ListNode* head) {
-        // termination
-        if (!head || !head->next) return head;
-        
-        // find middle of list
-        ListNode *slow = head, *fast = head->next;
-        while(fast) {
+    ListNode* partition(ListNode* head)
+    {
+        // 0. termination 
+        if (not head or not head->next) return head;
+
+        // 1. find middle of list (mid = l+(r-l)/2)
+        auto* slow = head;
+        auto* fast = head->next;
+        while (fast){
             fast = fast->next;
-            if (fast) {
-                fast = fast->next;
+            if (fast){
                 slow = slow->next;
+                fast = fast->next;
             }
         }
 
-        // partition
-        ListNode* r = sortList(slow->next);
+        // 2. partition
+        auto* right = partition(slow->next);
         slow->next = nullptr;   // truncate left half
-        ListNode* l = sortList(head);
-
-        // merge
-        return merge(l, r);
+        auto* left = partition(head);
+        return merge(left, right);
     }
 };
